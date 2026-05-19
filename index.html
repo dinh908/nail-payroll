@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nail Payroll</title>
+<link rel="manifest" href="manifest.json">
+<style>
+body{font-family:Arial;padding:15px;background:#f4f4f4}
+.card{background:white;padding:15px;border-radius:12px;margin-bottom:12px}
+input,select,button{width:100%;padding:10px;margin-top:8px}
+.ticket{border-bottom:1px solid #ddd;padding:6px}
+</style>
+</head>
+<body>
+<h2>💅 Nail Payroll</h2>
+
+<div class="card">
+<h3>Add Ticket</h3>
+<input id="date" type="date">
+<input id="serviceName" placeholder="Service name">
+<input id="serviceAmount" type="number" placeholder="Service amount">
+<input id="tip" type="number" placeholder="Tip">
+<button onclick="add()">Save Ticket</button>
+</div>
+
+<div class="card">
+<h3>Payroll Summary</h3>
+<select id="period" onchange="render()">
+<option value="weekly">Weekly</option>
+<option value="semi">Semi-Monthly</option>
+<option value="monthly">Monthly</option>
+</select>
+<p>Total Service: $<span id="totalService">0</span></p>
+<p>Total Tip: $<span id="totalTip">0</span></p>
+<p>Working Days: <span id="days">0</span></p>
+</div>
+
+<div class="card">
+<h3>History</h3>
+<div id="history"></div>
+</div>
+
+<script>
+let tickets=JSON.parse(localStorage.getItem("tickets")||"[]");
+
+function add(){
+let t={
+date:date.value,
+name:serviceName.value,
+amount:+serviceAmount.value,
+tip:+tip.value
+};
+tickets.push(t);
+localStorage.setItem("tickets",JSON.stringify(tickets));
+render();
+}
+
+function render(){
+history.innerHTML="";
+let total=0;
+let totalTip=0;
+let days=new Set();
+
+tickets.forEach((t,i)=>{
+total+=t.amount;
+totalTip+=t.tip;
+days.add(t.date);
+
+history.innerHTML+=`
+<div class=ticket>
+${t.date} | ${t.name} | $${t.amount} + Tip $${t.tip}
+</div>`;
+});
+
+totalService.innerText=total.toFixed(2);
+document.getElementById("totalTip").innerText=totalTip.toFixed(2);
+document.getElementById("days").innerText=days.size;
+}
+
+render();
+</script>
+</body>
+</html>
