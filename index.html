@@ -1,84 +1,143 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport"
+content="width=device-width,initial-scale=1">
+
 <title>Nail Payroll</title>
+
 <link rel="manifest" href="manifest.json">
-<style>
-body{font-family:Arial;padding:15px;background:#f4f4f4}
-.card{background:white;padding:15px;border-radius:12px;margin-bottom:12px}
-input,select,button{width:100%;padding:10px;margin-top:8px}
-.ticket{border-bottom:1px solid #ddd;padding:6px}
-</style>
+<link rel="stylesheet" href="style.css">
+
 </head>
+
 <body>
-<h2>💅 Nail Payroll</h2>
 
-<div class="card">
-<h3>Add Ticket</h3>
-<input id="date" type="date">
-<input id="serviceName" placeholder="Service name">
-<input id="serviceAmount" type="number" placeholder="Service amount">
-<input id="tip" type="number" placeholder="Tip">
-<button onclick="add()">Save Ticket</button>
+<div class="container">
+
+<div class="header">
+
+<h1>💅 Nail Payroll</h1>
+
 </div>
 
-<div class="card">
-<h3>Payroll Summary</h3>
-<select id="period" onchange="render()">
-<option value="weekly">Weekly</option>
-<option value="semi">Semi-Monthly</option>
-<option value="monthly">Monthly</option>
-</select>
-<p>Total Service: $<span id="totalService">0</span></p>
-<p>Total Tip: $<span id="totalTip">0</span></p>
-<p>Working Days: <span id="days">0</span></p>
+<div class="tabs">
+
+<button class="tab active"
+onclick="showTab('tickets')">
+Travel Ticket
+</button>
+
+<button class="tab"
+onclick="showTab('payroll')">
+Payroll
+</button>
+
 </div>
 
+<div id="tickets">
+
 <div class="card">
-<h3>History</h3>
-<div id="history"></div>
+
+<h2>Add Ticket</h2>
+
+<input type="date" id="date">
+
+<div class="quickButtons">
+
+<button onclick="quickFill('Pedi')">Pedi</button>
+
+<button onclick="quickFill('Mani')">Mani</button>
+
+<button onclick="quickFill('Full Set')">
+Full Set
+</button>
+
+<button onclick="quickFill('Fill')">
+Fill
+</button>
+
 </div>
 
-<script>
-let tickets=JSON.parse(localStorage.getItem("tickets")||"[]");
+<input
+id="service"
+placeholder="Service name">
 
-function add(){
-let t={
-date:date.value,
-name:serviceName.value,
-amount:+serviceAmount.value,
-tip:+tip.value
-};
-tickets.push(t);
-localStorage.setItem("tickets",JSON.stringify(tickets));
-render();
-}
+<input
+id="amount"
+placeholder="Service amount"
+type="number">
 
-function render(){
-history.innerHTML="";
-let total=0;
-let totalTip=0;
-let days=new Set();
+<input
+id="tip"
+placeholder="Tip"
+type="number">
 
-tickets.forEach((t,i)=>{
-total+=t.amount;
-totalTip+=t.tip;
-days.add(t.date);
+<button
+class="saveButton"
+onclick="saveTicket()">
 
-history.innerHTML+=`
-<div class=ticket>
-${t.date} | ${t.name} | $${t.amount} + Tip $${t.tip}
-</div>`;
-});
+Add Ticket
 
-totalService.innerText=total.toFixed(2);
-document.getElementById("totalTip").innerText=totalTip.toFixed(2);
-document.getElementById("days").innerText=days.size;
-}
+</button>
 
-render();
-</script>
+</div>
+
+
+<div class="card">
+
+<h2>History</h2>
+
+<div id="ticketList">
+
+</div>
+
+</div>
+
+</div>
+
+
+<div
+id="payroll"
+style="display:none">
+
+<div class="card summary">
+
+<h2>Payroll Summary</h2>
+
+<p>Total Service:
+<span id="totalService">
+0
+</span></p>
+
+<p>Total Tip:
+<span id="totalTip">
+0
+</span></p>
+
+<p>55% Profit:
+<span id="profit">
+0
+</span></p>
+
+<p>Paid Total:
+<span id="paid">
+0
+</span></p>
+
+<p>Working Days:
+<span id="days">
+0
+</span></p>
+
+</div>
+
+</div>
+
+</div>
+
+<script src="app.js"></script>
+
 </body>
 </html>
