@@ -1,1 +1,7 @@
-{"name":"Nail Payroll","short_name":"Payroll","display":"standalone","start_url":"./"}
+{
+"name":"Nail Payroll",
+"short_name":"Payroll",
+"display":"standalone",
+"start_url":"./",
+"background_color":"#ffffff"
+}
